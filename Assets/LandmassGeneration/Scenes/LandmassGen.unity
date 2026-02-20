@@ -167,7 +167,19 @@ MonoBehaviour:
   _mapDisplay: {fileID: 63451113}
   _mapWidth: 100
   _mapHeight: 100
-  _noiseScale: 0.4
+  _noiseScale: 17.17
+  _octaves: 4
+  _persistence: 0.183
+  _lacunarity: 1.82
+  _seed: 100
+  _offset: {x: 0.89, y: 1.52}
+  _regions:
+  - Name: Water
+    Height: 0.4
+    Colour: {r: 0.17740583, g: 0.4978462, b: 0.81761, a: 0}
+  - Name: Land
+    Height: 1
+    Colour: {r: 0.16017947, g: 0.5597484, b: 0.21662712, a: 0}
   _autoUpdate: 1
 --- !u!114 &63451113
 MonoBehaviour:
