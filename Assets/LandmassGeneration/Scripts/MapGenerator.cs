@@ -8,13 +8,18 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int _mapHeight;
     [SerializeField] private float _noiseScale;
     [SerializeField] private int _octaves;
-    [Range(0,1)]
+    [Range(0, 1)]
     [SerializeField] private float _persistence;
     [SerializeField] private float _lacunarity;
     [SerializeField] private int _seed;
     [SerializeField] private Vector2 _offset;
 
-    public enum DrawMode { NoiseMap, ColourMap };
+    public enum DrawMode
+    {
+        NoiseMap,
+        ColourMap,
+        Mesh,
+    };
     [SerializeField] private DrawMode _drawMode;
 
     [Serializable]
@@ -78,6 +83,10 @@ public class MapGenerator : MonoBehaviour
         else if (_drawMode == DrawMode.NoiseMap)
         {
             _mapDisplay.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+        }
+        else if (_drawMode == DrawMode.Mesh)
+        {
+            _mapDisplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColourMap(colourMap, _mapWidth, _mapHeight));
         }
     }
 
