@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   _mapDisplay: {fileID: 63451113}
-  _levelOfDetail: 0
+  _editorLevelOfDetail: 0
   _noiseScale: 22.5
   _octaves: 4
   _persistence: 0.071
@@ -261,6 +261,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7cf2cd4f783044998c400abae45e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessTerrain
+  _detailLevels:
+  - Lod: 0
+    VisibleDistanceThreshold: 200
+  - Lod: 1
+    VisibleDistanceThreshold: 400
+  - Lod: 2
+    VisibleDistanceThreshold: 600
   _viewer: {fileID: 197708399}
   _mapMaterial: {fileID: 2100000, guid: 21d0b001e5e0a7a4dad568d4507cb787, type: 2}
 --- !u!1 &197708395
