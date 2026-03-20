@@ -6,6 +6,8 @@ using static MeshGenerator;
 
 public class EndlessTerrain : MonoBehaviour
 {
+    const float SCALE = 1f;
+
     const float viewerMoveThresholdForChunkUpdate = 25f;
     const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
 
@@ -21,7 +23,7 @@ public class EndlessTerrain : MonoBehaviour
     private int _chunksVisibleInViewDistance;
 
     private Dictionary<Vector2, TerrainChunk> _terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-    List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+    static List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
 
     private static MapGenerator _mapGenerator;
 
@@ -38,7 +40,7 @@ public class EndlessTerrain : MonoBehaviour
 
     private void Update()
     {
-        viewerPosition = new Vector2(_viewer.position.x, _viewer.position.z);
+        viewerPosition = new Vector2(_viewer.position.x, _viewer.position.z) / SCALE;
 
         if((_viewerPositionOld - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
         {
@@ -107,7 +109,8 @@ public class EndlessTerrain : MonoBehaviour
             _meshFilter = _meshObject.GetComponent<MeshFilter>();
             _meshRenderer.sharedMaterial = material;
 
-            _meshObject.transform.position = positionV3;
+            _meshObject.transform.position = positionV3 * SCALE;
+            _meshObject.transform.localScale = Vector3.one * SCALE;
             _meshObject.transform.SetParent(parent);
 
             SetVisible(false);
@@ -127,7 +130,7 @@ public class EndlessTerrain : MonoBehaviour
             _mapDataReceived = true;
 
             Texture2D texture = TextureGenerator.TextureFromColourMap(mapData.ColourMap, MapGenerator.MAP_CHUNK_SIZE, MapGenerator.MAP_CHUNK_SIZE);
-            _meshRenderer.sharedMaterial.mainTexture = texture;
+            _meshRenderer.material.mainTexture = texture;
 
             UpdateTerrainChunk();
         }
@@ -142,7 +145,8 @@ public class EndlessTerrain : MonoBehaviour
             float viewerDistanceFromNearestEdge = Mathf.Sqrt(_bounds.SqrDistance(viewerPosition));
             bool visible = viewerDistanceFromNearestEdge <= MaxViewDist;
 
-            if (visible) {
+            if (visible) 
+            {
                 int lodIndex = 0;
                 for (int i = 0; i < _detailLevels.Length - 1; i++)
                 {
@@ -169,6 +173,8 @@ public class EndlessTerrain : MonoBehaviour
                         lodMesh.RequestMesh(_mapData);
                     }
                 }
+
+                _terrainChunksVisibleLastUpdate.Add(this);
             }
 
             SetVisible(visible);

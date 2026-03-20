@@ -1,8 +1,7 @@
 using System;
-using UnityEngine;
-using System.Threading;
 using System.Collections.Generic;
-using UnityEngine.AI;
+using System.Threading;
+using UnityEngine;
 using static MeshGenerator;
 
 public class MapGenerator : MonoBehaviour
@@ -30,6 +29,7 @@ public class MapGenerator : MonoBehaviour
 
     [Space]
     [Header("Draw Mode Options")]
+    [SerializeField] private Noise.NormalizeMode _normalizeMode;
     [SerializeField] private DrawMode _drawMode;
     public enum DrawMode
     {
@@ -126,7 +126,7 @@ public class MapGenerator : MonoBehaviour
 
     private MapData GenerateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(MAP_CHUNK_SIZE, MAP_CHUNK_SIZE, _noiseScale, _octaves, _persistence, _lacunarity, _seed, center + _offset);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MAP_CHUNK_SIZE, MAP_CHUNK_SIZE, _seed, _noiseScale, _octaves, _persistence, _lacunarity, center + _offset, _normalizeMode);
 
         Color[] colourMap = new Color[MAP_CHUNK_SIZE * MAP_CHUNK_SIZE];
         for (int y = 0; y < MAP_CHUNK_SIZE; y++)
@@ -136,9 +136,12 @@ public class MapGenerator : MonoBehaviour
                 float currentHeight = noiseMap[x, y];
                 for (int i = 0; i < _regions.Length; i++)
                 {
-                    if (currentHeight <= _regions[i].Height)
+                    if (currentHeight >= _regions[i].Height)
                     {
                         colourMap[y * MAP_CHUNK_SIZE + x] = _regions[i].Colour;
+                    }
+                    else
+                    {
                         break;
                     }
                 }
